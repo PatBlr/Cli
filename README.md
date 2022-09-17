@@ -33,11 +33,32 @@ cli.write("See?");
 ```
 ![grafik](https://user-images.githubusercontent.com/77332531/190852833-dee999bd-800e-43d3-8e62-8290855e5456.png)
 
+Ask
+-
+Prompts the user to answer a given question.
+```typescript
+const response = await cli.ask("What is your favorite fruit? ");
+```
+Returns the given response as a string.
+
+Choose
+-
+Prompts the user to choose a option from an array of options.\
+Arrow keys are used for the navigation and return to submit.
+
+```typescript
+const options = ["Apple", "Banana", "Orange", "Strawberry", "Raspberry"];
+const choice_idx = await cli.choose(options);
+```
+
+![choose](https://user-images.githubusercontent.com/77332531/190854994-944ebff8-9c13-44a2-ba91-1bcc440fb693.gif)
+
+Returns the index of the chosen option.
 
 Select
 -
-Allows a user to select options of a given array of tuples.\
-Arrow keys are used for the navigation, spacebar to select / deselect and return to submit.\
+Prompts the user to select options of a given array of tuples.\
+Arrow keys are used for the navigation, spacebar to select / deselect and return to submit.
 
 Tuples first entry is the option as a string and the second entry is a boolean whether the option is pre-selected.\
 Returns the altered array of tuples, where the selected options are marked with true and the unselected ones with false.
@@ -46,7 +67,7 @@ Returns the altered array of tuples, where the selected options are marked with 
 cli.write("What kind of fruits do you like? ");
 cli.writeln("(Everyone likes apples)", "grey");
 
-let selected = await cli.select([
+const selected = await cli.select([
     ["Apple", true],
     ["Banana", false],
     ["Orange", false],
@@ -54,7 +75,9 @@ let selected = await cli.select([
     ["Raspberry", false],
   ]);
 ```
-![Animation](https://user-images.githubusercontent.com/77332531/190853488-95e50f7a-a26a-476c-8a22-ba96ec1f40fb.gif)
+
+![Animation](https://user-images.githubusercontent.com/77332531/190854128-5da7007c-d571-418d-9cff-d2bf118030f9.gif)
+
 Returns
 ```typescript
 [
