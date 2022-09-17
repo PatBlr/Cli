@@ -1,14 +1,11 @@
 /**
- * Prompt to be used by the CLI
- *
- * Defines two states. `prompt_primary` state represents the active state of a prompt.
- * `prompt_secondary` state represents the inactive state of a prompt.
+ * Prompt to be used by the CLI\
+ * Defines two states. `prompt_primary` state represents the active state of a prompt.\
+ * `prompt_secondary` state represents the inactive or alternative state of a prompt.\
  * States should be of the same length
  *
- * Example:
- *
- * prompt_primary: `">"`
- *
+ * Example:\
+ * prompt_primary: `">"`\
  * prompt_secondary: `" "`
  */
 export interface Prompt {
@@ -39,21 +36,30 @@ export class Cli {
     this.readline.emitKeypressEvents(process.stdin);
   }
 
+  /**
+   * The Prompt is the console-outputs prefix
+   * @param _prompt `Prompt`\
+   * new Prompt to be used in the console
+   */
   public setPrompt(_prompt: Prompt): void {
     this.prompt = _prompt;
   }
 
+  /**
+   * @returns `string[]`\
+   * Array with names of supported colors.
+   */
   public getColors(): string[] {
     return Object.keys(this.COLORS);
   }
 
   /**
-   * Writes to console without newline
-   * @param phrase phrase to be written to the console
-   * @param color name of the color, the phrase will be written in (case-insensitive)
-   *
-   * If left empty, console-default is applied
-   *
+   * Writes to console
+   * @param phrase `string`\
+   * phrase to be written to the console
+   * @param color `string`\
+   * name of the color, the phrase will be written in (case-insensitive)\
+   * If left empty, console-default is applied\
    * For a full list of colors, refer to `getColors()`
    */
   public write(phrase: string, color?: string): void {
@@ -63,11 +69,11 @@ export class Cli {
 
   /**
    * Writes to console with newline
-   * @param phrase phrase to be written to the console
-   * @param color name of the color, the phrase will be written in (case-insensitive)
-   *
-   * If left empty, console-default is applied
-   *
+   * @param phrase `string`\
+   * phrase to be written to the console
+   * @param color `string`\
+   * name of the color, the phrase will be written in (case-insensitive)\
+   * If left empty, console-default is applied\
    * For a full list of colors, refer to `getColors()`
    */
   public writeln(phrase: string = "", color?: string): void {
@@ -77,8 +83,10 @@ export class Cli {
 
   /**
    * Prompts the user to answer a question
-   * @param question Question to ask a user
-   * @returns given response
+   * @param question `string`\
+   *  Question to ask a user
+   * @returns `string`\
+   * given response
    */
   public async ask(question: string, allowAbort?: boolean): Promise<string> {
     process.stdin.setRawMode(true);
@@ -99,17 +107,32 @@ export class Cli {
     return p_response;
   }
 
+  /**
+   * Prompts the user to choose one option of a given array of strings
+   * @param opts `string[]`\
+   * Array of options, the user can choose from.
+   * @param highlight_color `string`\
+   * [optional - default: `"cyan"`]\
+   * color in which the currently highlighted option will be displayed.
+   * @param allowAbort `boolean`\
+   * [optional - default: `true`]\
+   * determines whether an abort-event (Ctrl + C) will terminate the entire process.\
+   * If true - process will be terminated when abort-event happens.\
+   * If false - method will throw an exception when abort-event happens. Process will remain running.
+   * @returns `Promise<number>`\
+   * Promise with chosen options index
+   */
   public async choose(
     opts: string[],
     highlight_color: string = "CYAN",
     allowAbort: boolean = true
-  ) {
+  ): Promise<number> {
     highlight_color = this.evalColor(highlight_color);
     let choice: any;
     let active = 0;
     let aborted = false;
 
-    this.printAskOpts(opts, active, highlight_color, this.prompt);
+    this.printChoose(opts, active, highlight_color, this.prompt);
     this.hideCursor();
     while (choice != "return") {
       try {
@@ -125,7 +148,7 @@ export class Cli {
       // circle
       if (active < 0) active = opts.length - 1;
       if (active === opts.length) active = 0;
-      this.printAskOpts(opts, active, highlight_color, this.prompt);
+      this.printChoose(opts, active, highlight_color, this.prompt);
     }
     // resetting cursor position
     process.stdout.moveCursor(0, opts.length - 1);
@@ -141,6 +164,22 @@ export class Cli {
     return active;
   }
 
+  /**
+   * Prompts the user to select options of a given array of tuples
+   * @param opts `[string, boolean][]`\
+   * First element of the tuple is the Option as a `string`. Second entry is a `boolean` whether the option is pre-selected.
+   * @param highlight_color `string`\
+   * [optional - default: `"cyan"`]\
+   * color in which the currently highlighted option will be displayed.
+   * @param allowAbort `boolean`\
+   * [optional - default: `true`]\
+   * determines whether an abort-event (Ctrl + C) will terminate the entire process.\
+   * If true - process will be terminated when abort-event happens.\
+   * If false - method will throw an exception when abort-event happens. Process will remain running.
+   * @returns `[string, boolean][]`\
+   * Altered array of tuples.\
+   * Selected options will be marked with `true`, unselected ones with `false`.
+   */
   public async select(
     opts: [string, boolean][],
     highlight_color: string = "CYAN",
@@ -155,7 +194,7 @@ export class Cli {
     let active = 0;
     let aborted = false;
 
-    this.printSelectOpts(opts, active, highlight_color, select_prompt);
+    this.printSelect(opts, active, highlight_color, select_prompt);
 
     this.hideCursor();
     while (choice != "return") {
@@ -173,7 +212,7 @@ export class Cli {
       // circle
       if (active < 0) active = opts.length - 1;
       if (active === opts.length) active = 0;
-      this.printSelectOpts(opts, active, highlight_color, select_prompt);
+      this.printSelect(opts, active, highlight_color, select_prompt);
     }
     // resetting cursor position
     process.stdout.moveCursor(0, opts.length - 1);
@@ -189,6 +228,7 @@ export class Cli {
     return opts;
   }
 
+  /** TODO: Auto on lifecycle end */
   public end() {
     this.showCursor();
     process.exit();
@@ -214,7 +254,7 @@ export class Cli {
     return promise;
   }
 
-  private printAskOpts(
+  private printChoose(
     opts: string[],
     active: number,
     color: string,
@@ -234,7 +274,7 @@ export class Cli {
     process.stdout.moveCursor(0, -(opts.length - 1));
   }
 
-  private printSelectOpts(
+  private printSelect(
     opts: [string, boolean][],
     active: number,
     color: string,
