@@ -87,7 +87,7 @@ export class Cli {
       output: process.stdout,
     });
     let p_response: Promise<string> = new Promise((res, rej) => {
-      rl.question(question + this.prompt, (response: string) => {
+      rl.question(question, (response: string) => {
         process.stdin.on("keypress", (_, key) => {
           if (key.sequence === "\x03") {
             console.log("abort");
@@ -99,7 +99,7 @@ export class Cli {
     return p_response;
   }
 
-  public async askOpts(
+  public async choose(
     opts: string[],
     highlight_color: string = "CYAN",
     allowAbort: boolean = true
@@ -141,7 +141,7 @@ export class Cli {
     return active;
   }
 
-  public async selectOpts(
+  public async select(
     opts: [string, boolean][],
     highlight_color: string = "CYAN",
     allowAbort: boolean = true
@@ -274,4 +274,3 @@ export class Cli {
     return color;
   }
 }
-
