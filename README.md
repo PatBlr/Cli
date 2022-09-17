@@ -1,8 +1,14 @@
 # Cli
+Object oriented approach of a dynamic CLI-Library without the use of any additional npm packages except for buildin packages.
+
+Create a new CLI:
+```typescript
+const cli = new Cli();
+```
 
 Write
 -
-Allows to write to the console. The textcolor can be passed as an optional parameter.
+Writes a given string to the console. The textcolor can be passed as an optional parameter.
 
 <details>
   <summary>Supported textcolors</summary>
@@ -30,5 +36,22 @@ cli.write("See?");
 
 Select
 -
+Allows a user to select options of a given array of tuples.\
+Tuples first entry is the options as a string and the second entry is a boolean whether the option becomes pre-selected.\
+Returns the changed array of tuples.
+
+```typescript
+cli.write("What kind of fruits do you like? ");
+cli.writeln("(Everyone likes apples)", "grey");
+
+let selected = await cli.select([
+    ["Apple", false],
+    ["Banana", false],
+    ["Orange", false],
+    ["Strawberry", false],
+    ["Raspberry", false],
+  ]);
 ```
-```
+<img src="https://user-images.githubusercontent.com/77332531/190853488-95e50f7a-a26a-476c-8a22-ba96ec1f40fb.gif" width="50%">
+![Animation](https://user-images.githubusercontent.com/77332531/190853488-95e50f7a-a26a-476c-8a22-ba96ec1f40fb.gif)
+
