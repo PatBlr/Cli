@@ -60,8 +60,7 @@ Select
 Prompts the user to select options of a given array of tuples.\
 Arrow keys are used for the navigation, spacebar to select / deselect and return to submit.
 
-Tuples first entry is the option as a string and the second entry is a boolean whether the option is pre-selected.\
-Returns the altered array of tuples, where the selected options are marked with true and the unselected ones with false.
+Tuples first entry is the option as a string and the second entry is a boolean whether the option is pre-selected.
 
 ```typescript
 cli.write("What kind of fruits do you like? ");
@@ -78,7 +77,8 @@ const selected = await cli.select([
 
 ![Animation](https://user-images.githubusercontent.com/77332531/190854128-5da7007c-d571-418d-9cff-d2bf118030f9.gif)
 
-Returns
+Returns the altered array of tuples, where the selected options are marked with true and the unselected ones with false.
+
 ```typescript
 [
   [ 'Apple', true ],
