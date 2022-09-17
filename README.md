@@ -31,27 +31,37 @@ cli.write("This is a colored text! ", "cyan");
 cli.writeln("(This one ends with a newline!)", "yellow");
 cli.write("See?");
 ```
-<img src="https://user-images.githubusercontent.com/77332531/190852833-dee999bd-800e-43d3-8e62-8290855e5456.png" width="50%">
+![grafik](https://user-images.githubusercontent.com/77332531/190852833-dee999bd-800e-43d3-8e62-8290855e5456.png)
 
 
 Select
 -
 Allows a user to select options of a given array of tuples.\
-Tuples first entry is the options as a string and the second entry is a boolean whether the option becomes pre-selected.\
-Returns the changed array of tuples.
+Arrow keys are used for the navigation, spacebar to select / deselect and return to submit.\
+
+Tuples first entry is the option as a string and the second entry is a boolean whether the option is pre-selected.\
+Returns the altered array of tuples, where the selected options are marked with true and the unselected ones with false.
 
 ```typescript
 cli.write("What kind of fruits do you like? ");
 cli.writeln("(Everyone likes apples)", "grey");
 
 let selected = await cli.select([
-    ["Apple", false],
+    ["Apple", true],
     ["Banana", false],
     ["Orange", false],
     ["Strawberry", false],
     ["Raspberry", false],
   ]);
 ```
-<img src="https://user-images.githubusercontent.com/77332531/190853488-95e50f7a-a26a-476c-8a22-ba96ec1f40fb.gif" width="50%">
 ![Animation](https://user-images.githubusercontent.com/77332531/190853488-95e50f7a-a26a-476c-8a22-ba96ec1f40fb.gif)
-
+Returns
+```typescript
+[
+  [ 'Apple', true ],
+  [ 'Banana', true ],
+  [ 'Orange', false ],
+  [ 'Strawberry', true ],
+  [ 'Raspberry', false ]
+]
+```
