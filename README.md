@@ -43,7 +43,7 @@ Returns the given response as a string.
 
 Choose
 -
-Prompts the user to choose a option from an array of options.\
+Prompts the user to choose an option from an array of options.\
 Arrow keys are used for the navigation and return to submit.
 
 ```typescript
